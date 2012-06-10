@@ -195,7 +195,7 @@ const NSString *kAuthorKeyDate = @"date";
 				break;
 		} else {
 			if (parsingSubject) {
-				NSString *trimmedLine = [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                NSString *trimmedLine = [[line substringFromIndex:4] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
 				[result addObject:[NSDictionary dictionaryWithObjectsAndKeys:
 						@"subject", kHeaderKeyName, trimmedLine, kHeaderKeyContent, nil]];
 			} else {
@@ -246,7 +246,10 @@ const NSString *kAuthorKeyDate = @"date";
 			if ([subjectFirst isEqualToString:@""]) {
 				[subjectFirst appendString:[NSString stringWithFormat:@"%@",[GLFileView escapeHTML:[item objectForKey:kHeaderKeyContent]]]];
 			} else {
-				[subject appendString:[NSString stringWithFormat:@"%@<br/>",[GLFileView escapeHTML:[item objectForKey:kHeaderKeyContent]]]];
+                NSString *subjectDetail = [[GLFileView escapeHTML:[item objectForKey:kHeaderKeyContent]] 
+                                           stringByReplacingOccurrencesOfString:@" " 
+                                           withString:@"&nbsp;"];
+				[subject appendString:[NSString stringWithFormat:@"%@<br/>",subjectDetail]];
 			}
 
 		}else{
